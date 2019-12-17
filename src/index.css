@@ -8,3 +8,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background: linear-gradient(89deg, #5e8bff 0%, #04c8de 100%);
 }
+
+button {
+  cursor: pointer;
+  border: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
