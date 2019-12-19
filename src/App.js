@@ -70,28 +70,47 @@ class App extends Component {
     this.state = {
       input: '',
       imageUrl: '',
-      box: {},
+      boxes: [],
     }
   }
 
   calculateFaceLocation = (data) => {
-    const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
+    //------------------
+    //  MULTI VERSION
+    //------------------
     const image = document.getElementById('input-image');
     const width = Number(image.width);
     const height = Number(image.height);
-    console.log(width, height);
 
-    return {
-      leftCol: clarifaiFace.left_col * width,
-      topRow: clarifaiFace.top_row * height,
-      rightCol: width - (clarifaiFace.right_col * width),
-      bottomRow: height - (clarifaiFace.bottom_row * height)
-    }
+    return data.outputs[0].data.regions.map(face => {
+      const faces = face.region_info.bounding_box;
+      return {
+        leftCol: faces.left_col * width,
+        topRow: faces.top_row * height,
+        rightCol: width - (faces.right_col * width),
+        bottomRow: height - (faces.bottom_row * height)
+      }
+    });
+
+    //------------------
+    //  SINGLE VERSION
+    //------------------
+    // const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
+    // const image = document.getElementById('input-image');
+    // const width = Number(image.width);
+    // const height = Number(image.height);
+    // // console.log(width, height);
+
+    // return {
+    //   leftCol: clarifaiFace.left_col * width,
+    //   topRow: clarifaiFace.top_row * height,
+    //   rightCol: width - (clarifaiFace.right_col * width),
+    //   bottomRow: height - (clarifaiFace.bottom_row * height)
+    // }
   }
 
-  displayFaceBox = (box) => {
-    console.log(box);
-    this.setState({box: box});
+  displayFaceBox = (boxes) => {
+    this.setState({boxes});
   }
 
   onInputChange = (event) => {
@@ -122,7 +141,7 @@ class App extends Component {
         />
         <FaceRecognition 
           imageUrl={this.state.imageUrl} 
-          box={this.state.box}
+          boxes={this.state.boxes}
         />
       </div>
     );
