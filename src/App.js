@@ -75,8 +75,33 @@ class App extends Component {
       boxes: [],
       route: 'signin',
       isSignedIn: false,
+      user: {
+        id: '',
+        name: '',
+        email: '',
+        entries: 0,
+        joined: ''
+      }
     }
   }
+
+  loadUser = (data) => {
+    this.setState({
+      user: {
+        id: data.id,
+        name: data.name,
+        email: data.email,
+        entries: data.entries,
+        joined: data.joined
+     }
+    });
+  }
+
+  // componentDidMount() {
+  //   fetch('http://localhost:3001')
+  //     .then(response => response.json())
+  //     .then(console.log);
+  // }
 
   calculateFaceLocation = (data) => {
     //------------------
@@ -138,7 +163,6 @@ class App extends Component {
     } else if (route === 'home') {
       this.setState({isSignedIn: true})
     }
-    
     this.setState({route: route});
   }
 
@@ -164,8 +188,8 @@ class App extends Component {
             </div>
           : (
             route === 'signin'
-            ? <Signin onRouteChange={this.onRouteChange} /> 
-            : <Register onRouteChange={this.onRouteChange} /> 
+            ? <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange} /> 
+            : <Register loadUser={this.loadUser} onRouteChange={this.onRouteChange} /> 
           )
         }
       </div>
